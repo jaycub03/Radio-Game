@@ -260,23 +260,61 @@ class Car extends Phaser.Scene {
   constructor() {
     super("Car");
   }
+  player;
+  cursors;
+  preload() {
+    this.load.path = "../assets/";
+    this.load.image("player", "car.png");
+  }
+  //Adding in a different 2d endless runner to check how it would be like
+  create() {
+    //this.cursors = this.input.keyboard.createCursorKeys();
+    this.player = this.physics.add.sprite(64, 200, 'player');
+    //this.player = this.physics.add.image(300, 200, 'player');
+    this.player.setCollideWorldBounds(true);
+    this.cursors = this.input.keyboard.addKeys(
+      {up:Phaser.Input.Keyboard.KeyCodes.W,
+      down:Phaser.Input.Keyboard.KeyCodes.S,
+      left:Phaser.Input.Keyboard.KeyCodes.A,
+      right:Phaser.Input.Keyboard.KeyCodes.D});
+  }
 
-  preload() {}
-
-  create() {}
-
-  update() {}
+  update(){
+    this.player.setVelocity(0);
+    if (this.cursors.left.isDown)
+    {
+      this.player.setVelocityX(-300);
+    }
+    else if (this.cursors.right.isDown)
+    {
+      this.player.setVelocityX(300);
+    }
+    if (this.cursors.up.isDown)
+    {
+      this.player.setVelocityY(-300);
+    }
+    else if (this.cursors.down.isDown)
+    {
+      this.player.setVelocityY(300);
+    }
+  }
 }
 
-let configCar = {
+const configCar = {
   type: Phaser.WEBGL,
   width: 800,
   height: 300,
-  backgroundColor: 0xffffff,
+  backgroundColor: 0x000000,
+  physics:{
+    default: 'arcade',
+    arcade: {
+      debug: true
+    }
+  },
   scene: [Car],
 };
 
-let configRadio = {
+const configRadio = {
   type: Phaser.WEBGL,
   width: 800,
   height: 300,
@@ -284,6 +322,6 @@ let configRadio = {
   scene: [Level0, LevelSlider],
 };
 
-let gameCar = new Phaser.Game(configCar);
-let gameRadio = new Phaser.Game(configRadio);
+const gameCar = new Phaser.Game(configCar);
+const gameRadio = new Phaser.Game(configRadio);
 gameCar.scene.add("Scene2", configRadio.scene, true);
