@@ -13,12 +13,13 @@ class enemies extends Phaser.GameObjects.Sprite {
     const x = this.x;
     const y = this.y;
 
-    const rotation = Phaser.Math.Angle.Between(x, y, tx, ty);
+    const rotation = Phaser.Math.Angle.Between(x, y, px, py);
     this.setRotation(rotation);
+    this.physics.velocityFromRotation(this.rotation, this.moveSpeed);
   }
 
   reset() {
     this.x = this.initialX;
-    this.y = this.initialY
+    this.y = this.initialY;
   }
 }
