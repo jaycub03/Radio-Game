@@ -6,6 +6,8 @@ class PlayScene extends Phaser.Scene {
   preload() {
     //load play background image
     this.load.image("play_background", "../assets/play_background.png");
+    this.load.image("enemy", "../assets/enemy.png");
+    this.load.image("player", "../assets/player.png");
   }
 
   create() {
@@ -43,7 +45,8 @@ class PlayScene extends Phaser.Scene {
         }
       }
     });
-
+    //player(temp)
+    this.player = this.physics.add.image(game.config.width / 2, game.config.height / 2, 'player');
     // enemies
     this.enemy1 = new enemies(
       this,

@@ -15,7 +15,7 @@ class enemies extends Phaser.GameObjects.Sprite {
 
     const rotation = Phaser.Math.Angle.Between(x, y, px, py);
     this.setRotation(rotation);
-    this.scene.physics.velocityFromRotation(this.rotation, this.moveSpeed);
+    this.scene.physics.velocityFromRotation(rotation, this.moveSpeed);
   }
 
   reset() {
