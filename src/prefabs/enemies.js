@@ -3,6 +3,8 @@ class enemies extends Phaser.GameObjects.Sprite {
     super(scene, x, y, texture, frame);
     scene.add.existing(this);
     this.moveSpeed = 4;
+    this.initialX = x;
+    this.initialY = y;
   }
 
   update() {
@@ -15,5 +17,8 @@ class enemies extends Phaser.GameObjects.Sprite {
     this.setRotation(rotation);
   }
 
-  reset() {}
+  reset() {
+    this.x = this.initialX;
+    this.y = this.initialY
+  }
 }
