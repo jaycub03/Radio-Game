@@ -3,9 +3,18 @@ class MainScene extends Phaser.Scene {
     super("MainScene");
   }
 
-  preload() {}
+  preload() {
+
+    //load play background image
+    //this.load.image("play_background", "./assets/play_background.png")
+  }
 
   create() {
+
+
+    //make background visible
+    //this.backgroundImage = this.add.tileSprite(0, 0, 900, 700, "play_background").setOrigin(0, 0)
+
     // words
     this.songLyrics = "This is a song!".toLowerCase();
     this.words = this.songLyrics.split(" ");
