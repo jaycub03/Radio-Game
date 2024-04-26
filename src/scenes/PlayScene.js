@@ -106,6 +106,10 @@ class PlayScene extends Phaser.Scene {
   }
 
   update() {
+    this.enemy1.update();
+    this.enemy2.update();
+    this.enemy3.update();
+    this.enemy4.update();
     this.enemyWord1.x = this.enemy1.x;
     this.enemyWord1.y = this.enemy1.y;
     this.enemyWord2.x = this.enemy2.x;
@@ -118,6 +122,18 @@ class PlayScene extends Phaser.Scene {
     this.enemyWord2.text = this.enemyWords[1];
     this.enemyWord3.text = this.enemyWords[2];
     this.enemyWord4.text = this.enemyWords[3];
+    if(this.checkHit(this.player, this.enemy1)){
+      this.enemy1.reset();
+    }
+    if(this.checkHit(this.player, this.enemy2)){
+      this.enemy2.reset();
+    }
+    if(this.checkHit(this.player, this.enemy3)){
+      this.enemy3.reset();
+    }
+    if(this.checkHit(this.player, this.enemy4)){
+      this.enemy4.reset();
+    }
 
     // winning the game!
     if (this.songLyrics.length == 0) {
