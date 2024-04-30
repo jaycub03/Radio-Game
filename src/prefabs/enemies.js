@@ -1,8 +1,8 @@
 class enemies extends Phaser.GameObjects.Sprite {
-  constructor(scene, x, y, texture, frame) {
+  constructor(scene, x, y, texture, frame, moveSpeed) {
     super(scene, x, y, texture, frame);
     scene.add.existing(this);
-    this.moveSpeed = 1;
+    this.moveSpeed = moveSpeed;
     this.initialX = x;
     this.initialY = y;
   }
@@ -16,21 +16,21 @@ class enemies extends Phaser.GameObjects.Sprite {
     const rotation = Phaser.Math.Angle.Between(x, y, px, py);
     this.setRotation(rotation);
     //this.scene.physics.velocityFromRotation(this.rotation, this.moveSpeed);
-    if(x >= px && y >= py){
+    if (x >= px && y >= py) {
       this.x -= this.moveSpeed;
-      this.y -= this.moveSpeed;      
+      this.y -= this.moveSpeed;
     }
-    if(x >= px && y <= py){
+    if (x >= px && y <= py) {
       this.x -= this.moveSpeed;
-      this.y += this.moveSpeed;      
+      this.y += this.moveSpeed;
     }
-    if(x <= px && y >= py){
+    if (x <= px && y >= py) {
       this.x += this.moveSpeed;
-      this.y -= this.moveSpeed;      
+      this.y -= this.moveSpeed;
     }
-    if(x <= px && y <= py){
+    if (x <= px && y <= py) {
       this.x += this.moveSpeed;
-      this.y += this.moveSpeed;      
+      this.y += this.moveSpeed;
     }
   }
 
