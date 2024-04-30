@@ -84,10 +84,10 @@ class PlayScene extends Phaser.Scene {
     ).setOrigin(0, 0);
     this.allEnemies = [this.enemy1, this.enemy2, this.enemy3, this.enemy4];
     // words for enemies
-    this.enemyWord1 = this.add.text(this.enemy1.x, this.enemy1.y, "word1");
-    this.enemyWord2 = this.add.text(this.enemy2.x, this.enemy2.y, "word2");
-    this.enemyWord3 = this.add.text(this.enemy3.x, this.enemy3.y, "word3");
-    this.enemyWord4 = this.add.text(this.enemy4.x, this.enemy4.y, "word4");
+    this.enemyWord1 = this.add.text(this.enemy1.x, this.enemy1.y, "");
+    this.enemyWord2 = this.add.text(this.enemy2.x, this.enemy2.y, "");
+    this.enemyWord3 = this.add.text(this.enemy3.x, this.enemy3.y, "");
+    this.enemyWord4 = this.add.text(this.enemy4.x, this.enemy4.y, "");
     this.enemyTextObjects = [
       this.enemyWord1,
       this.enemyWord2,
@@ -97,6 +97,7 @@ class PlayScene extends Phaser.Scene {
     this.newWords();
 
     // beat stuff
+    // if the player hits enter at the right times, 2 enemies will slow down
     this.beatText = this.add.text(
       20,
       20,
@@ -108,6 +109,8 @@ class PlayScene extends Phaser.Scene {
     this.beatDuration = (60000 / this.BPM) * 3;
 
     // Draw a rectangle
+    this.lengthOfPowerUp = 9; // # of words before it turns off
+    this.startOfPowerUp = parseInt(this.words.length - this.words.length / 5);
     this.rectWidth = 0;
     this.powerUp = 0;
     this.graphics = this.add.graphics();
@@ -118,7 +121,6 @@ class PlayScene extends Phaser.Scene {
     // Set up interval timer for beats
     this.messageTimer = setInterval(() => {
       if (this.rectWidth == 100 || this.rectWidth == 120) {
-        console.log("Beat!");
         this.graphics.clear();
         this.rectWidth = 120;
         this.graphics.fillRect(50, 150, this.rectWidth, this.rectWidth);
@@ -140,8 +142,9 @@ class PlayScene extends Phaser.Scene {
     this.input.keyboard.on("keydown", (event) => {
       if (event.key === "Enter") {
         // Check if the key press is close enough to the beat
-        if (this.rectWidth == 120 || this.rectWidth == 100) {
-          console.log("Enter key pressed on beat!");
+        if (this.rectWidth == 120) {
+          // console.log("Enter key pressed on beat!");
+          this.powerUp += 1;
           this.graphics.clear();
           this.graphics.fillStyle(0x00ff00);
           this.rectWidth = 100;
@@ -154,7 +157,6 @@ class PlayScene extends Phaser.Scene {
   // Get new words
   newWords() {
     for (let i = 0; i < this.enemyWords.length; i += 1) {
-      //   console.log("i: ", i, this.allEnemies[i].x, this.allEnemies[i].y);
       if (
         this.allEnemies[i].x >= 0 &&
         this.allEnemies[i].x <= game.config.width &&
@@ -163,9 +165,6 @@ class PlayScene extends Phaser.Scene {
         this.enemyWords[i].length == 0
       ) {
         this.enemyWords[i] = this.words.shift();
-        if (this.rectWidth > 0) {
-          this.powerUp += 1;
-        }
       }
     }
   }
@@ -227,12 +226,14 @@ class PlayScene extends Phaser.Scene {
 
     // power ups when pressing enter
     // console.log("here: ", this.words.length);
-    if (this.words.length == 14) {
+    if (this.words.length == this.startOfPowerUp) {
       this.rectWidth = 120;
     }
-    if (this.words.length == 8) {
+    if (this.words.length == this.startOfPowerUp - this.lengthOfPowerUp) {
       if (this.powerUp >= 3) {
         this.beatText.text = "Nice job";
+        this.enemy1.decreaseSpeed();
+        this.enemy2.decreaseSpeed();
         this.powerUp = 0;
       }
       this.rectWidth = 0;

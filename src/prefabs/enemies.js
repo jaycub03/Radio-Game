@@ -7,6 +7,9 @@ class enemies extends Phaser.GameObjects.Sprite {
     this.initialY = y;
   }
 
+  decreaseSpeed() {
+    this.moveSpeed -= 0.05;
+  }
   update() {
     const px = game.config.width / 2;
     const py = game.config.height / 2;
