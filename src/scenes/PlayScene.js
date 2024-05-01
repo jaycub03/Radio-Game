@@ -8,7 +8,11 @@ class PlayScene extends Phaser.Scene {
     this.load.image("play_background", "../assets/play_background.png");
 
     //load bg anims atlas
-    this.load.atlas("background_atlas", "../assets/bg_anims.png", "../assets/bg_anims.json");
+    this.load.atlas(
+      "background_atlas",
+      "../assets/bg_anims.png",
+      "../assets/bg_anims.json"
+    );
 
     //load enemy/player images
     this.load.image("enemy", "../assets/enemy.png");
@@ -17,13 +21,17 @@ class PlayScene extends Phaser.Scene {
 
   create() {
     //create background anims
-    this.anims.create
-    ({
-        key: 'bgAnims',
-        frames: this.anims.generateFrameNames("background_atlas", {prefix: "bg_frame_", start: 1, end: 4, suffix: ".png"}),
-        frameRate: 4,
-        repeat: -1
-    })
+    this.anims.create({
+      key: "bgAnims",
+      frames: this.anims.generateFrameNames("background_atlas", {
+        prefix: "bg_frame_",
+        start: 1,
+        end: 4,
+        suffix: ".png",
+      }),
+      frameRate: 4,
+      repeat: -1,
+    });
 
     //make background visible and play background anims
     this.bg_anims = this.add.sprite(0, 0, "play_background").setOrigin(0);
@@ -114,7 +122,7 @@ class PlayScene extends Phaser.Scene {
     this.beatText = this.add.text(
       20,
       20,
-      "A green rect will appear on the\nscreen every once in a while.\nTo recieve power ups,Press enter\nwhen the rect incraeses in size!"
+      "Every once in a while, the player's\nsize will change. To recieve power\nups, Press enter when it incraeses\nin size!"
     );
 
     // Calculate beat duration in milliseconds
@@ -124,19 +132,15 @@ class PlayScene extends Phaser.Scene {
     // Draw a rectangle
     this.lengthOfPowerUp = 9; // # of words before it turns off
     this.startOfPowerUp = parseInt(this.words.length - this.words.length / 5);
-    this.rectWidth = 0;
+    this.characterSize = 0;
     this.powerUp = 0;
-    this.graphics = this.add.graphics();
-    this.graphics.clear();
-    this.graphics.fillStyle(0x00ff00);
-    this.graphics.fillRect(50, 150, this.rectWidth, this.rectWidth);
 
     // Set up interval timer for beats
+    // increase character size on beat
     this.messageTimer = setInterval(() => {
-      if (this.rectWidth == 100 || this.rectWidth == 120) {
-        this.graphics.clear();
-        this.rectWidth = 120;
-        this.graphics.fillRect(50, 150, this.rectWidth, this.rectWidth);
+      if (this.characterSize > 0 && this.beatTime == true) {
+        this.characterSize = 2;
+        this.player.setScale(this.characterSize);
       }
     }, this.beatDuration);
 
@@ -144,24 +148,19 @@ class PlayScene extends Phaser.Scene {
 
     // Set up timer to shrink the rectangle a few seconds after each beat
     this.shrinkTimer = setInterval(() => {
-      // Redraw the smaller rectangle
-      if (this.rectWidth == 120 || this.rectWidth == 100) {
-        this.rectWidth = 100;
-        this.graphics.clear();
-        this.graphics.fillRect(50, 150, this.rectWidth, this.rectWidth);
+      if (this.characterSize > 1 && this.beatTime == true) {
+        this.characterSize = 1;
+        this.player.setScale(this.characterSize);
       }
     }, this.beatDuration + 2000); // Shrink the rectangle 3 seconds after each beat
 
     this.input.keyboard.on("keydown", (event) => {
       if (event.key === "Enter") {
         // Check if the key press is close enough to the beat
-        if (this.rectWidth == 120) {
-          // console.log("Enter key pressed on beat!");
+        if (this.characterSize > 1 && this.beatTime == true) {
           this.powerUp += 1;
-          this.graphics.clear();
-          this.graphics.fillStyle(0x00ff00);
-          this.rectWidth = 100;
-          this.graphics.fillRect(50, 150, this.rectWidth, this.rectWidth);
+          this.characterSize = 1;
+          this.player.setScale(this.characterSize);
         }
       }
     });
@@ -238,19 +237,22 @@ class PlayScene extends Phaser.Scene {
     }
 
     // power ups when pressing enter
-    // console.log("here: ", this.words.length);
     if (this.words.length == this.startOfPowerUp) {
-      this.rectWidth = 120;
+      this.characterSize = 1;
+      this.beatTime = true;
     }
     if (this.words.length == this.startOfPowerUp - this.lengthOfPowerUp) {
+      this.beatTime = false;
       if (this.powerUp >= 3) {
         this.beatText.text = "Nice job";
         this.enemy1.decreaseSpeed();
         this.enemy2.decreaseSpeed();
         this.powerUp = 0;
       }
-      this.rectWidth = 0;
-      this.graphics.clear();
+      if (this.characterSize > 1) {
+        this.characterSize = 1;
+        this.player.setScale(this.characterSize);
+      }
     }
   }
 

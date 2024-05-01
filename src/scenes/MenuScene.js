@@ -1,23 +1,36 @@
 class MenuScene extends Phaser.Scene {
-    constructor() {
-      super("MenuScene");
-    }
-  
-    preload() {
+  constructor() {
+    super("MenuScene");
+  }
 
-    }
-  
-    create() {
+  preload() {}
 
-        this.startGame = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
-    }
+  create() {
+    this.add.text(
+      game.config.width * 0.35,
+      game.config.height * 0.1,
+      "Lyrics Typer",
+      {
+        fontSize: "32px",
+      }
+    );
+    this.add.text(
+      game.config.width * 0.35,
+      game.config.height * 0.15,
+      "Press 'P' to select songs",
+      {
+        fontSize: "16px",
+      }
+    );
 
-    update() {
+    this.startGame = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.P
+    );
+  }
 
-        if (this.startGame.isDown)
-        {
-            this.scene.start('PlayScene')
-        }
+  update() {
+    if (this.startGame.isDown) {
+      this.scene.start("PlayScene");
     }
+  }
 }
-  
