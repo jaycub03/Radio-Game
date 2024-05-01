@@ -138,7 +138,7 @@ class PlayScene extends Phaser.Scene {
     // Set up interval timer for beats
     // increase character size on beat
     this.messageTimer = setInterval(() => {
-      if (this.characterSize > 0 && this.beatTime == true) {
+      if (this.characterSize >= 1 && this.beatTime == true) {
         this.characterSize = 2;
         this.player.setScale(this.characterSize);
       }
