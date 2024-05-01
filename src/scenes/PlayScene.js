@@ -6,15 +6,28 @@ class PlayScene extends Phaser.Scene {
   preload() {
     //load play background image
     this.load.image("play_background", "../assets/play_background.png");
+
+    //load bg anims atlas
+    this.load.atlas("background_atlas", "../assets/bg_anims.png", "../assets/bg_anims.json");
+
+    //load enemy/player images
     this.load.image("enemy", "../assets/enemy.png");
     this.load.image("player", "../assets/player.png");
   }
 
   create() {
-    //make background visible
-    this.backgroundImage = this.add
-      .tileSprite(0, 0, 900, 700, "play_background")
-      .setOrigin(0, 0);
+    //create background anims
+    this.anims.create
+    ({
+        key: 'bgAnims',
+        frames: this.anims.generateFrameNames("background_atlas", {prefix: "bg_frame_", start: 1, end: 4, suffix: ".png"}),
+        frameRate: 4,
+        repeat: -1
+    })
+
+    //make background visible and play background anims
+    this.bg_anims = this.add.sprite(0, 0, "play_background").setOrigin(0);
+    this.bg_anims.anims.play("bgAnims");
 
     // words
     this.songLyrics =
