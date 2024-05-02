@@ -1,6 +1,7 @@
 class PlayScene extends Phaser.Scene {
   constructor() {
     super("PlayScene");
+    this.win = false
   }
 
   preload() {
@@ -16,7 +17,7 @@ class PlayScene extends Phaser.Scene {
 
     //load enemy/player images
     this.load.image("enemy", "../assets/enemy.png");
-    this.load.image("player", "../assets/player.png");
+    this.load.image("player", "../assets/player.png");  
   }
 
   create() {
@@ -184,6 +185,7 @@ class PlayScene extends Phaser.Scene {
   update() {
     // winning the game!
     if (this.words.length == 0) {
+      this.win = true
       this.scene.start("GameOverScene");
     }
     this.enemy1.update();
@@ -265,6 +267,7 @@ class PlayScene extends Phaser.Scene {
     ) {
       this.playerHealth -= 1;
       if (this.playerHealth <= 0) {
+        this.win = false
         this.scene.start("GameOverScene");
       }
       return true;
