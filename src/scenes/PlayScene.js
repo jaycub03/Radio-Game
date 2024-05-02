@@ -209,7 +209,7 @@ class PlayScene extends Phaser.Scene {
     this.enemyWord3.x = this.enemy3.x;
     this.enemyWord3.y = this.enemy3.y;
     this.enemyWord4.x = this.enemy4.x;
-    this.enemyWord4.y = this.enemy4.y;
+    this.enemyWord4.y = this.enemy4.y - 20;
     this.enemyWord1.text = this.enemyWords[0];
     this.enemyWord2.text = this.enemyWords[1];
     this.enemyWord3.text = this.enemyWords[2];
