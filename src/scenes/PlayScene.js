@@ -18,6 +18,9 @@ class PlayScene extends Phaser.Scene {
     //load enemy/player images
     this.load.image("enemy", "../assets/enemy.png");
     this.load.image("player", "../assets/player.png");
+
+    //best song ever
+    this.load.audio("music", "../assets/baby_cut.wav")
   }
 
   create() {
@@ -37,6 +40,11 @@ class PlayScene extends Phaser.Scene {
     //make background visible and play background anims
     this.bg_anims = this.add.sprite(0, 0, "play_background").setOrigin(0);
     this.bg_anims.anims.play("bgAnims");
+
+    //play the music
+    this.song = this.sound.add("music");
+    this.song.setVolume(0.3);
+    this.song.play();
 
     // words
     this.songLyrics =
@@ -184,6 +192,7 @@ class PlayScene extends Phaser.Scene {
       ) {
         if (this.words === undefined || this.words.length == 0) {
           this.win = true;
+          this.song.stop();
           this.scene.start("GameOverScene", { win: this.win });
         } else {
           this.enemyWords[i] = this.words.shift();
@@ -278,6 +287,7 @@ class PlayScene extends Phaser.Scene {
       this.playerHealth -= 1;
       if (this.playerHealth <= 0) {
         this.win = false;
+        this.song.stop();
         this.scene.start("GameOverScene", { win: this.win });
       }
       this.hpText.text = "HP: " + this.playerHealth;
