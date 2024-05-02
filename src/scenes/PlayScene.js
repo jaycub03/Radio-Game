@@ -83,7 +83,7 @@ class PlayScene extends Phaser.Scene {
       game.config.height * 0.9,
       "enemy",
       0,
-      0.3
+      0.2
     ).setOrigin(0, 0);
     this.enemy2 = new enemies(
       this,
@@ -91,7 +91,7 @@ class PlayScene extends Phaser.Scene {
       0,
       "enemy",
       0,
-      0.2
+      0.15
     ).setOrigin(0, 0);
     this.enemy3 = new enemies(
       this,
@@ -123,7 +123,7 @@ class PlayScene extends Phaser.Scene {
     ];
     this.newWords();
 
-    // beat stuff
+    // power up
     // if the player hits enter at the right times, 2 enemies will slow down
     this.beatText = this.add.text(
       20,
@@ -158,7 +158,7 @@ class PlayScene extends Phaser.Scene {
         this.characterSize = 1;
         this.player.setScale(this.characterSize);
       }
-    }, this.beatDuration + 2000); // Shrink the rectangle 3 seconds after each beat
+    }, this.beatDuration + 3000); // Shrink the rectangle 3 seconds after each beat
 
     this.input.keyboard.on("keydown", (event) => {
       if (event.key === "Enter") {
@@ -185,8 +185,9 @@ class PlayScene extends Phaser.Scene {
         if (this.words === undefined || this.words.length == 0) {
           this.win = true;
           this.scene.start("GameOverScene", { win: this.win });
+        } else {
+          this.enemyWords[i] = this.words.shift();
         }
-        this.enemyWords[i] = this.words.shift();
       }
     }
   }
