@@ -17,7 +17,7 @@ class PlayScene extends Phaser.Scene {
 
     //load enemy/player images
     this.load.image("enemy", "../assets/enemy.png");
-    this.load.image("player", "../assets/player.png");
+    this.load.image("player", "../assets/radioguy.gif");
 
     //best song ever
     this.load.audio("music", "../assets/baby_cut.wav");
@@ -115,11 +115,13 @@ class PlayScene extends Phaser.Scene {
       "HP: " + this.playerHealth
     );
 
-    this.player = this.physics.add.image(
-      game.config.width / 2,
-      game.config.height / 2,
-      "player"
-    );
+    this.player = this.physics.add
+      .image(game.config.width / 2, game.config.height / 2, "player")
+      .setScale(0.5);
+
+    this.player.width /= 2;
+    this.player.height /= 2;
+
     // enemies
     this.enemy1 = new enemies(
       this,
@@ -181,7 +183,7 @@ class PlayScene extends Phaser.Scene {
     this.beatDuration = (60000 / this.BPM) * 3;
 
     // Draw a rectangle
-    this.lengthOfPowerUp = 25; // # of words before it turns off
+    this.lengthOfPowerUp = 15; // # of words before it turns off
     this.startOfPowerUp = parseInt(this.words.length - this.words.length / 5);
     this.characterSize = 0;
     this.powerUp = 0;
@@ -189,8 +191,8 @@ class PlayScene extends Phaser.Scene {
     // Set up interval timer for beats
     // increase character size on beat
     this.messageTimer = setInterval(() => {
-      if (this.characterSize >= 1 && this.beatTime == true) {
-        this.characterSize = 2;
+      if (this.characterSize >= 0.5 && this.beatTime == true) {
+        this.characterSize = 1;
         this.player.setScale(this.characterSize);
       }
     }, this.beatDuration);
@@ -208,9 +210,9 @@ class PlayScene extends Phaser.Scene {
     this.input.keyboard.on("keydown", (event) => {
       if (event.key === "Enter") {
         // Check if the key press is close enough to the beat
-        if (this.characterSize > 1 && this.beatTime == true) {
+        if (this.characterSize > 0.5 && this.beatTime == true) {
           this.powerUp += 1;
-          this.characterSize = 1;
+          this.characterSize = 0.5;
           this.player.setScale(this.characterSize);
         }
       }
@@ -326,7 +328,7 @@ class PlayScene extends Phaser.Scene {
 
     // power ups when pressing enter
     if (this.words.length == this.startOfPowerUp) {
-      this.characterSize = 1;
+      this.characterSize = 0.5;
       this.beatTime = true;
     }
     if (this.words.length == this.startOfPowerUp - this.lengthOfPowerUp) {
@@ -337,8 +339,8 @@ class PlayScene extends Phaser.Scene {
         this.enemy2.decreaseSpeed();
         this.powerUp = 0;
       }
-      if (this.characterSize > 1) {
-        this.characterSize = 1;
+      if (this.characterSize > 0.5) {
+        this.characterSize = 0.5;
         this.player.setScale(this.characterSize);
       }
     }
