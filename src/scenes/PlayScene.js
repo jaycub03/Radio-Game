@@ -1,7 +1,7 @@
 class PlayScene extends Phaser.Scene {
   constructor() {
     super("PlayScene");
-    this.win = false
+    this.win = false;
   }
 
   preload() {
@@ -17,7 +17,7 @@ class PlayScene extends Phaser.Scene {
 
     //load enemy/player images
     this.load.image("enemy", "../assets/enemy.png");
-    this.load.image("player", "../assets/player.png");  
+    this.load.image("player", "../assets/player.png");
   }
 
   create() {
@@ -177,6 +177,10 @@ class PlayScene extends Phaser.Scene {
         this.allEnemies[i].y <= game.config.height &&
         this.enemyWords[i].length == 0
       ) {
+        if (this.words === undefined || this.words.length == 0) {
+          this.win = true;
+          this.scene.start("GameOverScene", { win: this.win });
+        }
         this.enemyWords[i] = this.words.shift();
       }
     }
@@ -184,9 +188,9 @@ class PlayScene extends Phaser.Scene {
 
   update() {
     // winning the game!
-    if (this.words.length == 0) {
-      this.win = true
-      this.scene.start("GameOverScene");
+    if (this.words === undefined || this.words.length == 0) {
+      this.win = true;
+      this.scene.start("GameOverScene", { win: this.win });
     }
     this.enemy1.update();
     this.enemy2.update();
@@ -267,8 +271,8 @@ class PlayScene extends Phaser.Scene {
     ) {
       this.playerHealth -= 1;
       if (this.playerHealth <= 0) {
-        this.win = false
-        this.scene.start("GameOverScene");
+        this.win = false;
+        this.scene.start("GameOverScene", { win: this.win });
       }
       return true;
     } else {
