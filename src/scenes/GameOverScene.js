@@ -17,12 +17,12 @@ class GameOverScene extends Phaser.Scene {
 
       if (this.win == true)
       {
-        this.winText = "You Win!"
+        this.winText = " You Win!"
       }
 
       else
       {
-        this.winText = "You Lose."
+        this.winText = " You Lose."
       }
 
       this.add.text(
@@ -33,12 +33,22 @@ class GameOverScene extends Phaser.Scene {
           fontSize: "32px",
         }
       );
+
       this.add.text(
         game.config.width * 0.35,
         game.config.height * 0.15,
         "Press 'P' to play again",
         {
           fontSize: "16px",
+        }
+      );
+
+      this.add.text(
+        game.config.width * 0.2,
+        game.config.height * 0.3,
+        "Credits:\nMika - typing mechanics and powerups\nIchiro - enemy spawns and movement\nJacob - character/enemy sprites and sound\nEmil - background sprite/animation and credits",
+        {
+          fontSize: "20px",
         }
       );
 
