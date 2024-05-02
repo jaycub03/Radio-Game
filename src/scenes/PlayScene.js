@@ -65,6 +65,11 @@ class PlayScene extends Phaser.Scene {
     });
     //player(temp)
     this.playerHealth = 5;
+    this.hpText = this.add.text(
+      game.config.width * 0.9,
+      game.config.height * 0.05,
+      "HP: " + this.playerHealth
+    );
 
     this.player = this.physics.add.image(
       game.config.width / 2,
@@ -274,6 +279,8 @@ class PlayScene extends Phaser.Scene {
         this.win = false;
         this.scene.start("GameOverScene", { win: this.win });
       }
+      this.hpText.text = "HP: " + this.playerHealth;
+
       return true;
     } else {
       return false;
