@@ -16,7 +16,7 @@ class PlayScene extends Phaser.Scene {
     );
 
     //load enemy/player images
-    this.load.image("enemy", "../assets/enemy.png");
+    this.load.image("enemy", "../assets/mic.png");
     this.load.image("player", "../assets/radioguy.gif");
 
     //best song ever
@@ -90,7 +90,7 @@ class PlayScene extends Phaser.Scene {
     // words
     // added the word delay when we want to wait until the instrumental part is over and the singing starts again
     this.songLyrics =
-      "delay delay delay delay Oh woah Oh woah delay delay delay delay Oh woah oh woah delay delay delay delay oh woah oh woah delay delay delay delay You know you love me Just shout whenever You are my love And we will never Are we an item? Were just friends Said Theres another and My first love broke my heart and I was like Baby baby baby oh Like baby baby baby no Like baby baby baby oh delay delay delay delay I thought youd always be mine mine Baby baby baby oh Like baby baby baby no Like baby baby baby oh delay delay delay delay I thought youd always be mine mine Oh for you I wouldve done whatever I wanna play it cool Ill buy you anything Im in pieces baby fix me till you wake me I just cant believe my first love wont be around Im like Baby baby baby oh Like baby baby baby no Like baby baby baby oh I thought youd always be mine mine Baby baby baby oh Like baby baby baby no Like baby baby baby oh I thought youd always be mine mine"
+      "delay delay delay delay Oh woah Oh woah delay delay delay delay Oh woah oh woah delay delay delay delay oh woah oh woah delay delay delay delay You know you love me Just shout whenever You are my love And we will never Are we an item? Were just friends Said Theres another and My first love broke my heart and I was like Baby baby baby oh Like baby baby baby no Like baby baby baby oh delay delay delay delay I thought youd always be mine mine Baby baby baby oh Like baby baby baby no Like baby baby baby oh delay delay delay delay I thought youd always be mine mine Oh for you I wouldve done whatever I wanna play it cool Ill buy you anything Im in pieces baby fix me I just cant believe my first love wont be around Im like Baby baby baby oh Like baby baby baby no Like baby baby baby oh I thought youd always be mine Baby baby baby oh Like baby baby baby no Like baby baby baby I thought youd always be mine"
         .toLowerCase()
         .replace(",", "")
         .replace("?", "")
@@ -139,38 +139,44 @@ class PlayScene extends Phaser.Scene {
     // enemies
     this.enemy1 = new enemies(
       this,
-      game.config.width / 2,
+      game.config.width * 0.45,
       game.config.height * 0.9,
       "enemy",
       0,
       0.2
-    ).setOrigin(0, 0);
+    );
+    this.enemy1.setOrigin(0.5, 0.5);
     this.enemy2 = new enemies(
       this,
-      game.config.width / 2,
-      0,
+      game.config.width * 0.45,
+      game.config.height - game.config.height * 0.9,
       "enemy",
       0,
       0.15
-    ).setOrigin(0, 0);
+    ).setOrigin(0.5, 0.5);
     this.enemy3 = new enemies(
       this,
       0,
-      game.config.height / 2,
+      game.config.height * 0.42,
 
       "enemy",
       0,
       0.1
-    ).setOrigin(0, 0);
+    ).setOrigin(0.5, 0.5);
     this.enemy4 = new enemies(
       this,
       game.config.width * 0.9,
-      game.config.height / 2,
+      game.config.height * 0.42,
       "enemy",
       0,
       0.2
-    ).setOrigin(0, 0);
+    ).setOrigin(0.5, 0.5);
     this.allEnemies = [this.enemy1, this.enemy2, this.enemy3, this.enemy4];
+    for (let i = 0; i < this.allEnemies.length; i += 1) {
+      this.allEnemies[i].setScale(0.2);
+      this.allEnemies[i].width /= 5;
+      this.allEnemies[i].height /= 5;
+    }
     // words for enemies
     this.enemyWord1 = this.add.text(this.enemy1.x, this.enemy1.y, "");
     this.enemyWord2 = this.add.text(this.enemy2.x, this.enemy2.y, "");
@@ -291,13 +297,13 @@ class PlayScene extends Phaser.Scene {
     this.enemy3.update();
     this.enemy4.update();
     this.enemyWord1.x = this.enemy1.x;
-    this.enemyWord1.y = this.enemy1.y;
+    this.enemyWord1.y = this.enemy1.y + 40;
     this.enemyWord2.x = this.enemy2.x;
-    this.enemyWord2.y = this.enemy2.y;
-    this.enemyWord3.x = this.enemy3.x;
-    this.enemyWord3.y = this.enemy3.y - 20;
-    this.enemyWord4.x = this.enemy4.x;
-    this.enemyWord4.y = this.enemy4.y;
+    this.enemyWord2.y = this.enemy2.y + 40;
+    this.enemyWord3.x = this.enemy3.x - 20;
+    this.enemyWord3.y = this.enemy3.y - 50;
+    this.enemyWord4.x = this.enemy4.x - 20;
+    this.enemyWord4.y = this.enemy4.y - 50;
     this.enemyWord1.text = this.enemyWords[0];
     this.enemyWord2.text = this.enemyWords[1];
     this.enemyWord3.text = this.enemyWords[2];
