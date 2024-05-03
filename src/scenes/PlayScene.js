@@ -21,6 +21,9 @@ class PlayScene extends Phaser.Scene {
 
     //best song ever
     this.load.audio("music", "../assets/baby_cut.wav");
+    // sound effects
+    this.load.audio("punch", "../assets/sounds/punch.mp3");
+    this.load.audio("stunned", "../assets/sounds/stunned.mp3");
   }
 
   create() {
@@ -45,6 +48,13 @@ class PlayScene extends Phaser.Scene {
     this.song = this.sound.add("music");
     this.song.setVolume(0.3);
     this.song.play();
+
+    this.punchSound = this.sound.add("punch");
+    this.stunnedSound = this.sound.add("stunned");
+    this.punchSound.setVolume(0.1);
+    this.stunnedSound.setVolume(0.6);
+
+    // These variables help align the words that appear on the screen with the typing
     this.startTime = this.time.now;
     this.breakTimes = [
       2 * 1000,
@@ -78,6 +88,7 @@ class PlayScene extends Phaser.Scene {
     ];
 
     // words
+    // added the word delay when we want to wait until the instrumental part is over and the singing starts again
     this.songLyrics =
       "delay delay delay delay Oh woah Oh woah delay delay delay delay Oh woah oh woah delay delay delay delay oh woah oh woah delay delay delay delay You know you love me Just shout whenever You are my love And we will never Are we an item? Were just friends Said Theres another and My first love broke my heart and I was like Baby baby baby oh Like baby baby baby no Like baby baby baby oh delay delay delay delay I thought youd always be mine mine Baby baby baby oh Like baby baby baby no Like baby baby baby oh delay delay delay delay I thought youd always be mine mine Oh for you I wouldve done whatever I wanna play it cool Ill buy you anything Im in pieces baby fix me till you wake me I just cant believe my first love wont be around Im like Baby baby baby oh Like baby baby baby no Like baby baby baby oh I thought youd always be mine mine Baby baby baby oh Like baby baby baby no Like baby baby baby oh I thought youd always be mine mine"
         .toLowerCase()
@@ -105,10 +116,13 @@ class PlayScene extends Phaser.Scene {
         ) {
           this.enemyWords[i] = this.enemyWords[i].slice(1);
         }
+        if (this.enemyWords[i].length == 0) {
+          this.allEnemies[i].reset();
+        }
       }
     });
     //player(temp)
-    this.playerHealth = 5;
+    this.playerHealth = 7;
     this.hpText = this.add.text(
       game.config.width * 0.9,
       game.config.height * 0.05,
@@ -192,7 +206,7 @@ class PlayScene extends Phaser.Scene {
     // increase character size on beat
     this.messageTimer = setInterval(() => {
       if (this.characterSize >= 0.5 && this.beatTime == true) {
-        this.characterSize = 1;
+        this.characterSize = 0.7;
         this.player.setScale(this.characterSize);
       }
     }, this.beatDuration);
@@ -201,8 +215,8 @@ class PlayScene extends Phaser.Scene {
 
     // Set up timer to shrink the rectangle a few seconds after each beat
     this.shrinkTimer = setInterval(() => {
-      if (this.characterSize > 1 && this.beatTime == true) {
-        this.characterSize = 1;
+      if (this.characterSize > 0.7 && this.beatTime == true) {
+        this.characterSize = 0.7;
         this.player.setScale(this.characterSize);
       }
     }, this.beatDuration + 3000); // Shrink the rectangle 3 seconds after each beat
@@ -229,6 +243,9 @@ class PlayScene extends Phaser.Scene {
         this.allEnemies[i].y <= game.config.height &&
         this.enemyWords[i].length == 0
       ) {
+        // punching enemies sound effect
+        this.punchSound.play();
+
         if (this.words === undefined || this.words.length == 0) {
           this.win = true;
           this.song.stop();
@@ -236,17 +253,10 @@ class PlayScene extends Phaser.Scene {
         } else {
           let newWord = this.words.shift();
 
-          console.log("word:", newWord, this.breakTimes);
           if (newWord == "delay") {
             this.currentTime = this.time.now;
             this.currentBreak = this.breakTimes.shift();
 
-            // console.log(
-            //   this.startTime,
-            //   this.currentTime,
-            //   this.startTime - this.currentTime,
-            //   this.breakTimes[0] - (this.currentTime - this.startTime)
-            // );
             if (this.currentTime - this.startTime <= this.breakTimes[0]) {
               this.enemyWords[i] = " ";
               this.allEnemies[i].setStop(true);
@@ -331,10 +341,10 @@ class PlayScene extends Phaser.Scene {
       this.characterSize = 0.5;
       this.beatTime = true;
     }
-    if (this.words.length == this.startOfPowerUp - this.lengthOfPowerUp) {
+    if (this.words.length <= this.startOfPowerUp - this.lengthOfPowerUp) {
       this.beatTime = false;
       if (this.powerUp >= 3) {
-        this.beatText.text = "Nice job";
+        this.beatText.text = "";
         this.enemy1.decreaseSpeed();
         this.enemy2.decreaseSpeed();
         this.powerUp = 0;
@@ -353,6 +363,9 @@ class PlayScene extends Phaser.Scene {
       player.y < enemy.y + enemy.height &&
       player.y + player.height > enemy.y
     ) {
+      // getting hit sound effect
+      this.stunnedSound.play();
+
       this.playerHealth -= 1;
       if (this.playerHealth <= 0) {
         this.win = false;
