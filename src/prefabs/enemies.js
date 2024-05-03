@@ -23,8 +23,8 @@ class enemies extends Phaser.GameObjects.Sprite {
       const x = this.x;
       const y = this.y;
 
-      const rotation = Phaser.Math.Angle.Between(x, y, px, py);
-      this.setRotation(rotation);
+      //const rotation = Phaser.Math.Angle.Between(x, y, px, py);
+      //this.setRotation(rotation);
       //this.scene.physics.velocityFromRotation(this.rotation, this.moveSpeed);
       if (x >= px && y >= py) {
         this.x -= this.moveSpeed;
